@@ -7,6 +7,9 @@ import { getSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { AuthButton } from "@/components/AuthButton";
 
+// ✅ Force this page to be dynamic, not pre-rendered at build time
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const session = await getSession();
   
