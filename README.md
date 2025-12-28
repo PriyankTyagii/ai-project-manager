@@ -185,8 +185,9 @@ ai-project-manager/
 ---
 
 ## Demo
+<img width="1573" height="730" alt="image" src="https://github.com/user-attachments/assets/f2a84299-a33a-454f-8256-18e10432a3d6" />
 
-
+<img width="898" height="797" alt="image" src="https://github.com/user-attachments/assets/cf202c64-b4b3-476d-a2ef-dd53e5b613a5" />
 
 ---
 
