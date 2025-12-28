@@ -14,6 +14,9 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { AuthButton } from "@/components/AuthButton";
 
+// ✅ Force this page to be dynamic, not pre-rendered at build time
+export const dynamic = 'force-dynamic';
+
 export default async function ProjectPage({
   params,
 }: {
