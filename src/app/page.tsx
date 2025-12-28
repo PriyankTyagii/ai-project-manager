@@ -1,120 +1,272 @@
-import Link from "next/link";
-import { Brain, Zap, TrendingUp, Shield, ArrowRight, Sparkles, LogIn } from "lucide-react";
-import { getSession } from "@/lib/auth/session";
+import { Brain, Zap, TrendingUp, Shield, ArrowRight, Sparkles, LogIn, CheckCircle2, BarChart3, Clock, GitBranch, Bell } from "lucide-react";
 
-export default async function HomePage() {
-  const session = await getSession();
+export default function HomePage() {
+  const session = false; // Replace with actual session check
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
-      {/* Header with Login Button */}
-      <header className="absolute top-0 right-0 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden relative">
+      {/* Subtle animated background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      </div>
+
+      {/* Header */}
+      <header className="relative z-10 flex justify-between items-center p-6 max-w-7xl mx-auto">
+        <div className="flex items-center space-x-3">
+          <div className="bg-gradient-to-br from-purple-500 to-indigo-600 p-2.5 rounded-xl shadow-lg">
+            <Brain className="w-7 h-7 text-white" />
+          </div>
+          <span className="text-white font-bold text-xl">AI Project Manager</span>
+        </div>
+        
         {session ? (
-          <Link
+          <a
             href="/dashboard"
-            className="flex items-center space-x-2 bg-white text-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg"
+            className="flex items-center space-x-2 bg-white text-purple-600 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-lg"
           >
-            <span>Go to Dashboard</span>
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+            <span>Dashboard</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
         ) : (
-          <Link
+          <a
             href="/login"
-            className="flex items-center space-x-2 bg-white text-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg"
+            className="flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/10 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-white/10 transition-all"
           >
-            <LogIn className="w-5 h-5" />
+            <LogIn className="w-4 h-4" />
             <span>Sign In</span>
-          </Link>
+          </a>
         )}
       </header>
 
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-4 mb-8 animate-fade-in">
-            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl shadow-2xl">
-              <Brain className="w-16 h-16 text-white" />
-            </div>
-            <h1 className="text-6xl font-bold text-white">
-              AI Project Manager
-            </h1>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-24">
+        <div className="text-center mb-20">
+          {/* Badge */}
+          <div className="inline-flex items-center space-x-2 bg-purple-500/10 backdrop-blur-sm border border-purple-500/20 px-4 py-2 rounded-full mb-8">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-purple-200 text-sm font-medium">Powered by OpenAI GPT-4</span>
           </div>
-          <p className="text-2xl text-white/90 mb-4 font-medium">
-            Your Autonomous Scrum Master That Never Sleeps
+
+          {/* Main Headline */}
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            Project Management
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+              That Runs Itself
+            </span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-gray-300 mb-3 font-normal max-w-3xl mx-auto leading-relaxed">
+            AI agents break down projects, detect risks, and generate daily insights
           </p>
-          <p className="text-lg text-white/70 mb-12 max-w-2xl mx-auto">
-            Let AI break down projects, detect blockers, and keep your team motivated - automatically
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            Event-driven architecture means your tasks are monitored 24/7—even while you sleep
           </p>
-          <Link
-            href={session ? "/dashboard" : "/signup"}
-            className="inline-flex items-center space-x-3 bg-white text-indigo-600 px-10 py-5 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all hover:scale-105 shadow-2xl"
-          >
-            <span>{session ? "Go to Dashboard" : "Get Started Free"}</span>
-            <ArrowRight className="w-6 h-6" />
-          </Link>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
+            <a
+              href={session ? "/dashboard" : "/signup"}
+              className="group inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-purple-600 hover:to-indigo-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105"
+            >
+              <span>{session ? "Go to Dashboard" : "Start Free"}</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            
+            <a
+              href="https://github.com/PriyankTyagii/ai-project-manager"
+              className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/10 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition-all"
+            >
+              <GitBranch className="w-5 h-5" />
+              <span>View on GitHub</span>
+            </a>
+          </div>
+
+          {/* Trust Indicators */}
+          <div className="mt-10 flex flex-wrap justify-center items-center gap-6 text-gray-400 text-sm">
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-green-400" />
+              <span>100% Open Source</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-green-400" />
+              <span>MIT Licensed</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-green-400" />
+              <span>Self-Hostable</span>
+            </div>
+          </div>
         </div>
 
-        {/* Feature Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-20">
+        {/* Feature Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-20">
           <FeatureCard
-            icon={<Zap className="w-12 h-12 text-yellow-400" />}
+            icon={<Zap className="w-8 h-8" />}
             title="Autonomous Planning"
-            description="AI breaks down your project into actionable tasks with priorities and estimates"
-            gradient="from-yellow-400/20 to-orange-400/20"
+            description="GPT-4 generates sprint-ready tasks with priorities and estimates in seconds"
+            color="purple"
           />
           <FeatureCard
-            icon={<Shield className="w-12 h-12 text-red-400" />}
+            icon={<Shield className="w-8 h-8" />}
             title="Risk Detection"
-            description="Automatically detects blockers, delays, and dependency conflicts"
-            gradient="from-red-400/20 to-pink-400/20"
+            description="Event-driven monitoring detects blockers, delays, and dependency conflicts"
+            color="red"
           />
           <FeatureCard
-            icon={<Sparkles className="w-12 h-12 text-purple-400" />}
-            title="Smart Motivation"
-            description="Encouraging nudges that keep you on track without being annoying"
-            gradient="from-purple-400/20 to-indigo-400/20"
+            icon={<Bell className="w-8 h-8" />}
+            title="Smart Alerts"
+            description="Contextual notifications keep you informed without overwhelming your inbox"
+            color="blue"
           />
           <FeatureCard
-            icon={<TrendingUp className="w-12 h-12 text-green-400" />}
-            title="Daily Insights"
-            description="AI-generated summaries showing progress, blockers, and priorities"
-            gradient="from-green-400/20 to-emerald-400/20"
+            icon={<TrendingUp className="w-8 h-8" />}
+            title="Daily Reports"
+            description="Automated summaries at 8 PM with progress metrics and actionable insights"
+            color="green"
           />
         </div>
 
-        {/* Stats */}
-        <div className="mt-20 grid grid-cols-3 gap-8 text-center">
-          <StatCard number="10x" label="Faster Planning" />
-          <StatCard number="24/7" label="Always Working" />
-          <StatCard number="0%" label="Human Error" />
+        {/* How It Works */}
+        <div className="mt-32">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              How It Actually Works
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Event-driven AI agents that respond to your project activity in real-time
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <ProcessCard 
+              step="1"
+              title="Describe Your Goal"
+              description="Enter project details in natural language"
+              detail="Example: 'Build a SaaS dashboard with user auth and analytics'"
+            />
+            <ProcessCard 
+              step="2"
+              title="AI Generates Tasks"
+              description="Planner Agent creates 8-15 actionable tasks"
+              detail="Includes priorities, estimates, and dependencies"
+            />
+            <ProcessCard 
+              step="3"
+              title="Continuous Monitoring"
+              description="Risk Agent tracks progress via event triggers"
+              detail="Detects stalls, blockers, and generates daily reports"
+            />
+          </div>
+        </div>
+
+        {/* Technical Details */}
+        <div className="mt-32 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 backdrop-blur-sm border border-white/5 rounded-2xl p-12">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Built for Developers
+            </h2>
+            <p className="text-gray-400 text-lg">
+              Modern stack with event-driven architecture
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <TechCard title="Next.js 14" description="App Router + Server Actions" />
+            <TechCard title="Inngest" description="Event orchestration" />
+            <TechCard title="Prisma + PostgreSQL" description="Type-safe database" />
+            <TechCard title="OpenAI GPT-4" description="Task generation" />
+          </div>
+        </div>
+
+       
+
+        {/* Final CTA */}
+        <div className="mt-32 text-center bg-gradient-to-r from-purple-900/30 to-indigo-900/30 backdrop-blur-sm border border-white/10 rounded-2xl p-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to automate your workflow?
+          </h2>
+          <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+            Deploy your own instance in minutes. No vendor lock-in, no monthly fees.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            
+            <a
+              href="https://github.com/PriyankTyagii/ai-project-manager"
+              className="inline-flex items-center space-x-2 bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-all shadow-xl"
+            >
+              <GitBranch className="w-5 h-5" />
+              <span>View Documentation</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function FeatureCard({ icon, title, description, gradient }: {
+function FeatureCard({ icon, title, description, color }: {
   icon: React.ReactNode;
   title: string;
   description: string;
-  gradient: string;
+  color: string;
 }) {
+  const colorMap = {
+    purple: 'from-purple-500/10 to-purple-600/10 border-purple-500/20 text-purple-400',
+    red: 'from-red-500/10 to-red-600/10 border-red-500/20 text-red-400',
+    blue: 'from-blue-500/10 to-blue-600/10 border-blue-500/20 text-blue-400',
+    green: 'from-green-500/10 to-green-600/10 border-green-500/20 text-green-400',
+  };
+
   return (
-    <div className={`bg-gradient-to-br ${gradient} backdrop-blur-sm border border-white/20 p-8 rounded-2xl hover:scale-105 transition-all shadow-xl`}>
-      <div className="bg-white/90 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+    <div className={`bg-gradient-to-br ${colorMap[color as keyof typeof colorMap].split(' ')[0]} ${colorMap[color as keyof typeof colorMap].split(' ')[1]} backdrop-blur-sm border ${colorMap[color as keyof typeof colorMap].split(' ')[2]} p-6 rounded-xl hover:scale-105 transition-all duration-300`}>
+      <div className={`${colorMap[color as keyof typeof colorMap].split(' ')[3]} mb-4`}>
         {icon}
       </div>
-      <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
-      <p className="text-white/80 leading-relaxed">{description}</p>
+      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+      <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
     </div>
   );
 }
 
-function StatCard({ number, label }: { number: string; label: string }) {
+function ProcessCard({ step, title, description, detail }: {
+  step: string;
+  title: string;
+  description: string;
+  detail: string;
+}) {
   return (
-    <div className="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-2xl">
-      <div className="text-5xl font-bold text-white mb-2">{number}</div>
-      <div className="text-white/70 text-lg">{label}</div>
+    <div className="relative bg-gradient-to-br from-purple-900/20 to-indigo-900/20 backdrop-blur-sm border border-white/10 p-8 rounded-xl hover:border-purple-500/30 transition-all">
+      <div className="absolute -top-4 left-8 bg-gradient-to-r from-purple-500 to-indigo-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-lg">
+        {step}
+      </div>
+      <h3 className="text-xl font-bold text-white mb-2 mt-2">{title}</h3>
+      <p className="text-gray-300 mb-3 text-sm">{description}</p>
+      <p className="text-gray-500 text-xs italic">{detail}</p>
+    </div>
+  );
+}
+
+function TechCard({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="text-center">
+      <div className="text-white font-semibold mb-1">{title}</div>
+      <div className="text-gray-400 text-sm">{description}</div>
+    </div>
+  );
+}
+
+function StatCard({ icon, value, label }: { 
+  icon: React.ReactNode; 
+  value: string; 
+  label: string;
+}) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-xl text-center hover:bg-white/10 transition-all">
+      <div className="flex justify-center mb-3">{icon}</div>
+      <div className="text-3xl font-bold text-white mb-1">{value}</div>
+      <div className="text-gray-400 text-sm">{label}</div>
     </div>
   );
 }
