@@ -1,9 +1,10 @@
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
 import { cookies } from 'next/headers';
 
 const secret = new TextEncoder().encode(process.env.SESSION_SECRET);
 
-export interface SessionData {
+/* ✅ FIX: Extend JWTPayload */
+export interface SessionData extends JWTPayload {
   userId: string;
   email: string;
   name?: string;
@@ -18,7 +19,7 @@ export async function createSession(data: SessionData) {
     .setExpirationTime('7d')
     .sign(secret);
 
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   cookieStore.set('session', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -29,20 +30,20 @@ export async function createSession(data: SessionData) {
 }
 
 export async function getSession(): Promise<SessionData | null> {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const token = cookieStore.get('session');
 
   if (!token) return null;
 
   try {
-    const verified = await jwtVerify(token.value, secret);
-    return verified.payload as SessionData;
-  } catch (error) {
+    const { payload } = await jwtVerify(token.value, secret);
+    return payload as SessionData;
+  } catch {
     return null;
   }
 }
 
 export async function deleteSession() {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   cookieStore.delete('session');
 }

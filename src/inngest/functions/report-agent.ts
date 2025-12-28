@@ -24,10 +24,10 @@ export const reportAgent = inngest.createFunction(
       const report = await step.run(`generate-report-${project.id}`, async () => {
         const today = new Date();
         const completedToday = project.tasks.filter(
-          t => t.completedAt && 
-          t.completedAt >= startOfDay(today) && 
-          t.completedAt <= endOfDay(today)
-        );
+  t => t.completedAt && 
+       new Date(t.completedAt) >= startOfDay(today) &&
+       new Date(t.completedAt) <= endOfDay(today)
+);
 
         const inProgress = project.tasks.filter(t => t.status === "in_progress");
         const blocked = project.tasks.filter(t => t.status === "blocked");
