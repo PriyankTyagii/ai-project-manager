@@ -1,14 +1,26 @@
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { DailySummary } from "@/components/DailySummary";
 import { AgentActivity } from "@/components/AgentActivity";
 import { Brain, ArrowLeft, Activity, ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
+import { getSession } from "@/lib/auth/session";
+import { AuthButton } from "@/components/AuthButton";
 
 export default async function ProjectPage({ params }: { params: { id: string } }) {
-  const project = await prisma.project.findUnique({
-    where: { id: params.id },
+  const session = await getSession();
+  
+  if (!session) {
+    redirect("/login");
+  }
+
+  // 🆕 FILTER PROJECT BY USER
+  const project = await prisma.project.findFirst({
+    where: { 
+      id: params.id,
+      userId: session.userId,
+    },
     include: {
       tasks: {
         include: { agentComments: true },
@@ -43,9 +55,13 @@ export default async function ProjectPage({ params }: { params: { id: string } }
               <ArrowLeft className="w-4 h-4" />
               <span className="font-medium text-sm">Back to Dashboard</span>
             </Link>
-            <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Activity className="w-4 h-4 text-white" />
-              <span className="text-white font-semibold text-sm">{velocity}% Complete</span>
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                <Activity className="w-4 h-4 text-white" />
+                <span className="text-white font-semibold text-sm">{velocity}% Complete</span>
+              </div>
+              {/* 🆕 AUTH BUTTON */}
+              <AuthButton user={session} />
             </div>
           </div>
 

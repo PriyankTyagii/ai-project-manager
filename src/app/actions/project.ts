@@ -3,9 +3,21 @@
 import { prisma } from "@/lib/prisma";
 import { inngest } from "@/lib/inngest/client";
 import { revalidatePath } from "next/cache";
+import { getSession } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
+
+async function requireAuth() {
+  const session = await getSession();
+  if (!session) {
+    redirect("/login");
+  }
+  return session;
+}
 
 export async function createProject(formData: FormData) {
   try {
+    const session = await requireAuth();
+    
     const name = formData.get("name") as string;
     const goal = formData.get("goal") as string;
 
@@ -13,11 +25,13 @@ export async function createProject(formData: FormData) {
       throw new Error("Name and goal are required");
     }
 
+    // Create project with userId
     const project = await prisma.project.create({
       data: { 
         name, 
         goal,
-        description: ""
+        description: "",
+        userId: session.userId, // 🆕 ADD USER ID
       }
     });
 
@@ -40,8 +54,14 @@ export async function createProject(formData: FormData) {
 
 export async function getProject(projectId: string) {
   try {
-    return await prisma.project.findUnique({
-      where: { id: projectId },
+    const session = await requireAuth();
+    
+    // Only return project if it belongs to user
+    return await prisma.project.findFirst({
+      where: { 
+        id: projectId,
+        userId: session.userId, // 🆕 FILTER BY USER
+      },
       include: {
         tasks: {
           include: { agentComments: true },
@@ -57,12 +77,20 @@ export async function getProject(projectId: string) {
 
 export async function updateTaskStatus(taskId: string, status: string) {
   try {
+    const session = await requireAuth();
+    
     const task = await prisma.task.findUnique({
-      where: { id: taskId }
+      where: { id: taskId },
+      include: { project: true }
     });
 
     if (!task) {
       throw new Error("Task not found");
+    }
+
+    // Verify project belongs to user
+    if (task.project.userId !== session.userId) {
+      throw new Error("Unauthorized");
     }
 
     const updated = await prisma.task.update({
@@ -94,8 +122,13 @@ export async function updateTaskStatus(taskId: string, status: string) {
 
 export async function getAllProjects() {
   try {
+    const session = await requireAuth();
+    
     return await prisma.project.findMany({
-      where: { status: "active" },
+      where: { 
+        status: "active",
+        userId: session.userId, // 🆕 FILTER BY USER
+      },
       include: {
         tasks: true
       },

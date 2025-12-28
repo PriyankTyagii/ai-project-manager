@@ -1,9 +1,33 @@
 import Link from "next/link";
-import { Brain, Zap, TrendingUp, Shield, ArrowRight, Sparkles } from "lucide-react";
+import { Brain, Zap, TrendingUp, Shield, ArrowRight, Sparkles, LogIn } from "lucide-react";
+import { getSession } from "@/lib/auth/session";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await getSession();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
+      {/* Header with Login Button */}
+      <header className="absolute top-0 right-0 p-6">
+        {session ? (
+          <Link
+            href="/dashboard"
+            className="flex items-center space-x-2 bg-white text-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg"
+          >
+            <span>Go to Dashboard</span>
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="flex items-center space-x-2 bg-white text-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg"
+          >
+            <LogIn className="w-5 h-5" />
+            <span>Sign In</span>
+          </Link>
+        )}
+      </header>
+
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-16">
@@ -22,10 +46,10 @@ export default function HomePage() {
             Let AI break down projects, detect blockers, and keep your team motivated - automatically
           </p>
           <Link
-            href="/dashboard"
+            href={session ? "/dashboard" : "/signup"}
             className="inline-flex items-center space-x-3 bg-white text-indigo-600 px-10 py-5 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all hover:scale-105 shadow-2xl"
           >
-            <span>Get Started</span>
+            <span>{session ? "Go to Dashboard" : "Get Started Free"}</span>
             <ArrowRight className="w-6 h-6" />
           </Link>
         </div>
@@ -69,7 +93,12 @@ export default function HomePage() {
   );
 }
 
-function FeatureCard({ icon, title, description, gradient }: any) {
+function FeatureCard({ icon, title, description, gradient }: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  gradient: string;
+}) {
   return (
     <div className={`bg-gradient-to-br ${gradient} backdrop-blur-sm border border-white/20 p-8 rounded-2xl hover:scale-105 transition-all shadow-xl`}>
       <div className="bg-white/90 w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
@@ -81,7 +110,7 @@ function FeatureCard({ icon, title, description, gradient }: any) {
   );
 }
 
-function StatCard({ number, label }: any) {
+function StatCard({ number, label }: { number: string; label: string }) {
   return (
     <div className="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-2xl">
       <div className="text-5xl font-bold text-white mb-2">{number}</div>

@@ -3,10 +3,23 @@ import { CreateProjectForm } from "@/components/CreateProjectForm";
 import { ProjectList } from "@/components/ProjectList";
 import { Brain, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { getSession } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
+import { AuthButton } from "@/components/AuthButton";
 
 export default async function DashboardPage() {
+  const session = await getSession();
+  
+  if (!session) {
+    redirect("/login");
+  }
+
+  // 🆕 FILTER PROJECTS BY USER
   const projects = await prisma.project.findMany({
-    where: { status: "active" },
+    where: { 
+      status: "active",
+      userId: session.userId,
+    },
     include: {
       tasks: true
     },
@@ -15,7 +28,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header with Gradient */}
+      {/* Header with Auth Button */}
       <header className="bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
@@ -32,18 +45,17 @@ export default async function DashboardPage() {
                 <p className="text-white/80 text-sm">Manage all your AI-powered projects</p>
               </div>
             </div>
-            <div className="w-20"></div>
+            {/* 🆕 AUTH BUTTON */}
+            <AuthButton user={session} />
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Create Project Section */}
         <div className="mb-12">
           <CreateProjectForm />
         </div>
 
-        {/* Projects Grid */}
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Active Projects ({projects.length})</h2>
           <ProjectList projects={projects} />
