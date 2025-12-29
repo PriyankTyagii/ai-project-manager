@@ -84,7 +84,7 @@ export default function HomePage() {
           </div>
 
           {/* Trust Indicators */}
-          <div className="mt-10 flex flex-wrap justify-center items-center gap-6 text-gray-400 text-sm">
+          {/* <div className="mt-10 flex flex-wrap justify-center items-center gap-6 text-gray-400 text-sm">
             <div className="flex items-center space-x-2">
               <CheckCircle2 className="w-4 h-4 text-green-400" />
               <span>100% Open Source</span>
@@ -97,7 +97,7 @@ export default function HomePage() {
               <CheckCircle2 className="w-4 h-4 text-green-400" />
               <span>Self-Hostable</span>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Feature Grid */}
